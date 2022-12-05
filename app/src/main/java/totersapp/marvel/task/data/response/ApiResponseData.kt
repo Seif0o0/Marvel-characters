@@ -1,13 +1,12 @@
 package totersapp.marvel.task.data.response
 
 import com.squareup.moshi.JsonClass
-import totersapp.marvel.task.data.model.MarvelCharacterDto
 
 @JsonClass(generateAdapter = true)
-class CharactersResponseData(
+class ApiResponseData<T>(
     val offset: Int,
     val limit: Int,
     val total: Int,
     val count: Int,
-    val results: List<MarvelCharacterDto>
+    val results: List<T>
 )

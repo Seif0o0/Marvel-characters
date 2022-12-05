@@ -13,7 +13,10 @@ fun <T> handleStatusCode(application: Application, response: Response<T>): Strin
             val body = response.errorBody()
             val adapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
             val errorParser = adapter.fromJson(body?.string() ?: "")
+
+            // if message == null .. check if status == null or not ...
             errorParser?.message
+                ?: errorParser?.status
                 ?: application.getString(R.string.something_went_wrong_try_again_later)
         }
         401 ->

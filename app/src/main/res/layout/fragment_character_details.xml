@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="totersapp.marvel.task.domain.model.ImageSize" />
+
+        <variable
+            name="character"
+            type="totersapp.marvel.task.domain.model.MarvelCharacter" />
+
+        <variable
+            name="viewModel"
+            type="totersapp.marvel.task.presentation.viewmodel.CharacterDetailsViewModel" />
+
+        <variable
+            name="comicsRetryListener"
+            type="totersapp.marvel.task.presentation.adapter.RetryClickListener" />
+
+        <variable
+            name="eventsRetryListener"
+            type="totersapp.marvel.task.presentation.adapter.RetryClickListener" />
+
+        <variable
+            name="seriesRetryListener"
+            type="totersapp.marvel.task.presentation.adapter.RetryClickListener" />
+
+        <variable
+            name="storiesRetryListener"
+            type="totersapp.marvel.task.presentation.adapter.RetryClickListener" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_background_color"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_180sdp"
+                android:scaleType="fitXY"
+                app:image_size="@{ImageSize.STANDARDFANTASTIC.value}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:thumbnail="@{character.thumbnail}"
+                tools:src="@mipmap/ic_launcher" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/transparent_white_gradient"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="@id/image"
+                app:layout_constraintTop_toTopOf="@id/image" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/tajwal_medium"
+                android:maxLines="1"
+                android:text="@{character.name}"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_16ssp"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="@id/image"
+                tools:text="Captain America" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:fontFamily="@font/tajwal_regular"
+                android:text="@{character.description}"
+                android:textColor="@color/description_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                tools:text="character description character description character description character description character description character description character description character description character description character description character description character description " />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/comics_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.comicsEmptyState}"
+                app:constraint_referenced_ids="comics_label,comics_list" />
+
+            <TextView
+                android:id="@+id/comics_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:fontFamily="@font/tajwal_bold"
+                android:text="@string/comics_label"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/comics_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/comics_label"
+                app:layout_constraintTop_toBottomOf="@id/comics_label"
+                tools:itemCount="3"
+                tools:listitem="@layout/comic_item" />
+
+            <include
+                android:id="@+id/comics_error_view"
+                layout="@layout/small_error_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:errorMessage="@{viewModel.comicsErrorState}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/comics_label"
+                app:retryListener="@{comicsRetryListener}" />
+
+            <include
+                android:id="@+id/comics_loading"
+                layout="@layout/small_loading_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/comics_label"
+                app:loadingStatus="@{viewModel.comicsLoadingState}" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/comics_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="comics_list,comics_label,comics_loading,comics_error_view" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/events_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.eventsEmptyState}"
+                app:constraint_referenced_ids="events_label,events_list" />
+
+            <TextView
+                android:id="@+id/events_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:fontFamily="@font/tajwal_bold"
+                android:text="@string/events_label"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/comics_barrier" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/events_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/events_label"
+                app:layout_constraintTop_toBottomOf="@id/events_label"
+                tools:itemCount="3"
+                tools:listitem="@layout/event_item" />
+
+            <include
+                android:id="@+id/events_error_view"
+                layout="@layout/small_error_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:errorMessage="@{viewModel.eventsErrorState}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/events_label"
+                app:retryListener="@{eventsRetryListener}" />
+
+            <include
+                android:id="@+id/events_loading"
+                layout="@layout/small_loading_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/events_label"
+                app:loadingStatus="@{viewModel.eventsLoadingState}" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/events_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="events_list,events_label,events_loading,events_error_view" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/series_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.seriesEmptyState}"
+                app:constraint_referenced_ids="series_label,series_list" />
+
+            <TextView
+                android:id="@+id/series_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:fontFamily="@font/tajwal_bold"
+                android:text="@string/series_label"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/events_barrier" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/series_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/series_label"
+                app:layout_constraintTop_toBottomOf="@id/series_label"
+                tools:itemCount="3"
+                tools:listitem="@layout/series_item" />
+
+            <include
+                android:id="@+id/series_error_view"
+                layout="@layout/small_error_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:errorMessage="@{viewModel.seriesErrorState}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/series_label"
+                app:retryListener="@{seriesRetryListener}" />
+
+            <include
+                android:id="@+id/series_loading"
+                layout="@layout/small_loading_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/series_label"
+                app:loadingStatus="@{viewModel.seriesLoadingState}" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/series_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="series_list,series_label,series_loading,series_error_view" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/stories_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.storiesEmptyState}"
+                app:constraint_referenced_ids="stories_label,stories_list" />
+
+            <TextView
+                android:id="@+id/stories_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:fontFamily="@font/tajwal_bold"
+                android:text="@string/stories_label"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/series_barrier" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stories_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/stories_label"
+                app:layout_constraintTop_toBottomOf="@id/stories_label"
+                app:layout_constraintVertical_bias="0"
+                tools:itemCount="3"
+                tools:listitem="@layout/story_item" />
+
+            <include
+                android:id="@+id/stories_error_view"
+                layout="@layout/small_error_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:errorMessage="@{viewModel.storiesErrorState}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stories_label"
+                app:layout_constraintVertical_bias="0"
+                app:retryListener="@{storiesRetryListener}" />
+
+            <include
+                android:id="@+id/stories_loading"
+                layout="@layout/small_loading_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_190sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stories_label"
+                app:layout_constraintVertical_bias="0"
+                app:loadingStatus="@{viewModel.storiesLoadingState}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -7,13 +7,21 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import totersapp.marvel.task.databinding.LoadMoreProgressViewBinding
+import javax.inject.Inject
 
-class ListLoadStateAdapter(
-    private val retryListener: RetryClickListener
+class ListLoadStateAdapter @Inject constructor(
 ) : LoadStateAdapter<ListLoadStateAdapter.ViewHolder>() {
+
+    private var retryListener: RetryClickListener? = null
+
+    fun setRetryListener(retryListener: RetryClickListener) {
+        this.retryListener = retryListener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder {
         return ViewHolder.from(parent)
     }
+
     override fun onBindViewHolder(holder: ViewHolder, loadState: LoadState) {
         var errorMessage = ""
         val loadingStatus: Boolean
@@ -30,7 +38,7 @@ class ListLoadStateAdapter(
                 errorMessage = loadState.error.localizedMessage!!
             }
         }
-        holder.bind(errorMessage, errorVisibility, loadingStatus, retryListener)
+        holder.bind(errorMessage, errorVisibility, loadingStatus, retryListener!!)
     }
 
     class ViewHolder private constructor(private val binding: LoadMoreProgressViewBinding) :

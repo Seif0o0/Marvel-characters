@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.airbnb.lottie.LottieAnimationView
@@ -29,6 +30,21 @@ fun ImageView.loadImage(thumbnail: Thumbnail?, imageSize: String) {
         loadImage("", "", imageSize)
     }
 
+}
+
+@BindingAdapter("start_date", "end_date")
+fun TextView.setRangeDate(startDate: String?, endDate: String?) {
+    if (startDate.isNullOrEmpty() || endDate.isNullOrEmpty()) {
+        visibility = View.GONE
+        return
+    }
+
+    visibility = View.VISIBLE
+    val start = startDate.split(" ")[0]
+    val end = endDate.split(" ")[0]
+
+    val rslt = "${start.replace("-", "/")} - ${end.replace("-", "/")}"
+    text = rslt
 }
 
 @BindingAdapter("loading_status")
@@ -61,9 +77,9 @@ fun LottieAnimationView.setErrorStatus(isError: Boolean, errorMessage: String) {
     }
 }
 
-
 @BindingAdapter("error_status")
 fun ConstraintLayout.setErrorStatus(isError: Boolean) {
     visibility = if (isError) View.VISIBLE
     else View.GONE
 }
+

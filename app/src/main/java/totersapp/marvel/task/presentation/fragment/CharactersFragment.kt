@@ -12,10 +12,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import totersapp.marvel.task.R
 import totersapp.marvel.task.databinding.FragmentCharactersBinding
 import totersapp.marvel.task.presentation.adapter.CharactersAdapter
 import totersapp.marvel.task.presentation.adapter.ListItemClickListener
@@ -32,6 +34,9 @@ class CharactersFragment : Fragment() {
 
     @Inject
     lateinit var charactersAdapter: CharactersAdapter
+
+    @Inject
+    lateinit var loadStateAdapter: ListLoadStateAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -51,24 +56,26 @@ class CharactersFragment : Fragment() {
         }
         binding.lifecycleOwner = requireActivity()
 
-
-//        charactersAdapter = CharactersAdapter(clickListener = ListItemClickListener {
-//            Toast.makeText(requireContext(), it.name, Toast.LENGTH_LONG).show()
-//        })
-
         charactersAdapter.setOnClickListener(ListItemClickListener {
-            Toast.makeText(requireContext(), it.name, Toast.LENGTH_SHORT).show()
+            if (findNavController().currentDestination?.id == R.id.charactersFragment) findNavController().navigate(
+                CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailsFragment(
+                    marvelCharacter = it
+                )
+            )
         })
+
         charactersAdapter.addLoadStateListener { combinedLoadStates ->
             viewModel.handleLoadStateListener(combinedLoadStates, charactersAdapter.itemCount)
         }
 
+        loadStateAdapter.setRetryListener(RetryClickListener {
+            charactersAdapter.retry()
+        })
+
         binding.list.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = charactersAdapter.withLoadStateFooter(
-                footer = ListLoadStateAdapter(RetryClickListener {
-                    charactersAdapter.retry()
-                })
+                footer = loadStateAdapter
             )
         }
 
@@ -80,14 +87,12 @@ class CharactersFragment : Fragment() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.screenSizeState.collectLatest {
-                if (it.first < 600)
-                    binding.list.layoutManager = LinearLayoutManager(requireContext())
-                else if (it.first < 840)
-                    binding.list.layoutManager =
-                        GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-                else
-                    binding.list.layoutManager =
-                        GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                if (it.first < 600) binding.list.layoutManager =
+                    LinearLayoutManager(requireContext())
+                else if (it.first < 840) binding.list.layoutManager =
+                    GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+                else binding.list.layoutManager =
+                    GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
             }
         }
 

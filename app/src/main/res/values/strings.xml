@@ -8,4 +8,8 @@
     <string name="error_403_message">Forbidden: You don\'t have permission to access this resource.</string>
     <string name="empty_characters_list_text">No characters found</string>
     <string name="tap_to_retry">Tap to Retry</string>
+    <string name="comics_label">Comics</string>
+    <string name="events_label">Events</string>
+    <string name="series_label">Series</string>
+    <string name="stories_label">Stories</string>
 </resources>

@@ -8,36 +8,33 @@
         <import type="totersapp.marvel.task.domain.model.ImageSize" />
 
         <variable
-            name="character"
-            type="totersapp.marvel.task.domain.model.MarvelCharacter" />
+            name="event"
+            type="totersapp.marvel.task.domain.model.Event" />
 
-        <variable
-            name="clickListener"
-            type="totersapp.marvel.task.presentation.adapter.ListItemClickListener&lt;totersapp.marvel.task.domain.model.MarvelCharacter>" />
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{()-> clickListener.onItemClickListener(character)}"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_190sdp"
         app:cardBackgroundColor="@color/main_background_color"
         app:cardCornerRadius="@dimen/_8sdp"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_130sdp"
+                android:layout_height="0dp"
                 android:scaleType="fitXY"
-                app:image_size="@{ImageSize.STANDARDFANTASTIC.value}"
+                app:image_size="@{ImageSize.PORTRAITXLARGE.value}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:thumbnail="@{character.thumbnail}" />
+                app:thumbnail="@{event.thumbnail}"
+                tools:src="@drawable/ic_launcher_background" />
 
             <View
                 android:layout_width="0dp"
@@ -53,18 +50,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/tajwal_medium"
+                android:maxLines="1"
+                android:text="@{event.title}"
+                android:textColor="@color/titles_text_color"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/date_range"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Event title title title title title title " />
+
+            <TextView
+                android:id="@+id/date_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
                 android:ellipsize="end"
                 android:fontFamily="@font/tajwal_medium"
                 android:maxLines="1"
-                android:text="@{character.name}"
-                android:textColor="@color/titles_text_color"
-                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/dates_text_color"
+                android:textSize="@dimen/_11ssp"
+                app:end_date="@{event.endDate}"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Character name" />
+                app:start_date="@{event.startDate}"
+                tools:text="22/12/2022 - 22/12/2022" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 </layout>

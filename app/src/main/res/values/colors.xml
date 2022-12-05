@@ -12,7 +12,9 @@
     <color name="retry_text_color">#747474</color>
     <color name="main_buttons_background_color">#20509A</color>
     <color name="titles_text_color">#000000</color>
+    <color name="dates_text_color">#747474</color>
     <color name="white_with_30_opacity">#CCFFFFFF</color>
     <color name="empty_list_text_color">#747474</color>
     <color name="error_message_color">#FF0000</color>
+    <color name="description_text_color">#747474</color>
 </resources>
