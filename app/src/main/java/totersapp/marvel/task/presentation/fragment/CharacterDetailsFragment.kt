@@ -50,6 +50,9 @@ class CharacterDetailsFragment : Fragment() {
         binding.storiesRetryListener = RetryClickListener { viewModel.getStories() }
         binding.lifecycleOwner = requireActivity()
 
+        if (savedInstanceState != null) {
+            binding.scrollView.scrollY = savedInstanceState.getInt(SCROLL_POSITION_KEY)
+        }
         binding.comicsList.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -104,5 +107,11 @@ class CharacterDetailsFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private val SCROLL_POSITION_KEY = "scrollPosition"
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(SCROLL_POSITION_KEY, binding.scrollView.scrollY)
+        super.onSaveInstanceState(outState)
     }
 }

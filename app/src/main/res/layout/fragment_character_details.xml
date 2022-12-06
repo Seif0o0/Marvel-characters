@@ -36,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/main_background_color"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:id="@+id/scroll_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:thumbnail="@{character.thumbnail}"
-                tools:src="@mipmap/ic_launcher" />
+                tools:src="@drawable/marvel_placeholder_icon" />
 
             <View
                 android:layout_width="0dp"
@@ -88,7 +89,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:fontFamily="@font/tajwal_regular"
-                android:text="@{character.description}"
+                app:description="@{character.description}"
                 android:textColor="@color/description_text_color"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@id/image"

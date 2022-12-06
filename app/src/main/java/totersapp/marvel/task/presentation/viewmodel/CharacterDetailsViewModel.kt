@@ -166,7 +166,6 @@ class CharacterDetailsViewModel @Inject constructor(
 
     fun getStories() {
         viewModelScope.launch {
-            delay(5000)
             repo.fetchStories(characterId = characterId, map = map).collectLatest { result ->
                 when (result) {
                     is DataState.Success -> {

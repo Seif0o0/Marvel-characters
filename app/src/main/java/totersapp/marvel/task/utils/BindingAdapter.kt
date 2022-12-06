@@ -17,8 +17,8 @@ import totersapp.marvel.task.domain.model.Thumbnail
 fun ImageView.loadImage(url: String, extension: String, imageSize: String) {
     Glide.with(context)
         .load("$url/$imageSize.$extension")
-        .placeholder(R.mipmap.ic_launcher)
-        .error(R.mipmap.ic_launcher)
+        .placeholder(R.drawable.marvel_placeholder_icon)
+        .error(R.drawable.marvel_placeholder_icon)
         .into(this)
 }
 
@@ -30,6 +30,17 @@ fun ImageView.loadImage(thumbnail: Thumbnail?, imageSize: String) {
         loadImage("", "", imageSize)
     }
 
+}
+
+@BindingAdapter("description")
+fun TextView.setDescription(description: String) {
+    if (description.isEmpty()) {
+        visibility = View.GONE
+        return
+    }
+
+    visibility = View.VISIBLE
+    text = description
 }
 
 @BindingAdapter("start_date", "end_date")
